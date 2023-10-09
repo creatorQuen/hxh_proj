@@ -6,24 +6,40 @@ class Player(
     attack : Int,
     defence : Int,
     health : Int,
-    minDamage : Int,
-    maxDamage : Int
-) : AbstractCreature(attack, defence, health, minDamage, maxDamage), IAttack, IHealing {
+    rangeDamage: IntRange
+) : AbstractCreature(attack, defence, health, rangeDamage), IAttack, IHealing {
 
-    var _damage = 0
-    var _heatPoints = health
+    private var maxHeatPoints = health
 
     private var _countHeal = 0
 
 
     override fun attack(creature: AbstractCreature) {
-       // var modifyAttack =
-    }
+       val modifierAttack = if (attack - creature.defense + 1 <= 0 ) attack - creature.defense + 1  else 1
+
+        var success = false
+        for(i in 1..modifierAttack) {
+            val cubeNumber = (0..6).random()
+
+            if (cubeNumber >= 5) {
+                success = true
+                break
+            }
+        }
+
+        if (success) {
+            val damage = rangeDamage.random()
+            println("Player damage: $damage damage.")
+            creature.takeHealth(damage)
+        } else {
+            println("Player miss attack.")
+        }
+     }
 
     override fun heal() {
         if (_countHeal > MAX_HEAL_IN_GAME) {
 
-            var newHealth = _heatPoints + health / 3
+            var newHealth = maxHeatPoints + health / 3
             if ( newHealth > health) {
                 newHealth = health
             }
