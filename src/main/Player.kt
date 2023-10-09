@@ -1,5 +1,7 @@
 package main
 
+import kotlin.math.max
+
 const val MAX_HEAL_IN_GAME = 4
 
 class Player(
@@ -9,9 +11,9 @@ class Player(
     rangeDamage: IntRange
 ) : AbstractCreature(attack, defence, health, rangeDamage), IAttack, IHealing {
 
-    private var maxHeatPoints = health
+    var countHeal = MAX_HEAL_IN_GAME
 
-    private var _countHeal = 0
+    private var maxHeatPoints = health
 
 
     override fun attack(creature: AbstractCreature) {
@@ -29,7 +31,7 @@ class Player(
 
         if (success) {
             val damage = rangeDamage.random()
-            println("Player damage: $damage damage.")
+            println("Player damage: $damage.")
             creature.takeHealth(damage)
         } else {
             println("Player miss attack.")
@@ -37,14 +39,23 @@ class Player(
      }
 
     override fun heal() {
-        if (_countHeal > MAX_HEAL_IN_GAME) {
+        if (health == maxHeatPoints) {
+            println("You have max health: ${maxHeatPoints}.")
+            return
+        }
 
-            var newHealth = maxHeatPoints + health / 3
-            if ( newHealth > health) {
-                newHealth = health
+        if (countHeal > 0) {
+            val newHealth = maxHeatPoints / 3 + health
+            if (newHealth > maxHeatPoints) {
+                health = maxHeatPoints
+            } else {
+                health = newHealth
             }
 
-            this._countHeal++
+            println("You health increase: ${maxHeatPoints / 3}")
+            this.countHeal--
+        } else {
+            println("You can't heal anymore.")
         }
     }
 }

@@ -22,7 +22,7 @@ class Monster(
 
         if (success) {
             val damage = rangeDamage.random()
-            println("Monster damage: $damage damage.")
+            println("Monster damage: $damage.")
             creature.takeHealth(damage)
         } else {
             println("Monster miss attack.")
