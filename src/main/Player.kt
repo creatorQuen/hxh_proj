@@ -3,40 +3,32 @@ package main
 const val MAX_HEAL_IN_GAME = 4
 
 class Player(
-    private val attack : Int,
-    private val defence : Int,
-    private val maxHealth : Int,
-    private val minDamage : Int,
-    private val maxDamage : Int) : AbstractCreature(), IAttack, IHealing {
+    attack : Int,
+    defence : Int,
+    health : Int,
+    minDamage : Int,
+    maxDamage : Int
+) : AbstractCreature(attack, defence, health, minDamage, maxDamage), IAttack, IHealing {
 
     var _damage = 0
-    var _heatPoints = maxHealth
+    var _heatPoints = health
 
     private var _countHeal = 0
 
 
-    override fun attack(damage: Int) {
+    override fun attack(creature: AbstractCreature) {
        // var modifyAttack =
     }
 
-    override fun heal(): AbstractCreature {
-        if ( _heatPoints <= 0 ) {
-            throw MyException("Heat points for creature is zero")
-        }
-
+    override fun heal() {
         if (_countHeal > MAX_HEAL_IN_GAME) {
 
-            var newHealth = _heatPoints + maxHealth / 3
-            if ( newHealth > maxHealth) {
-                newHealth = maxHealth
+            var newHealth = _heatPoints + health / 3
+            if ( newHealth > health) {
+                newHealth = health
             }
 
-            val player = Player(attack, defence, newHealth, minDamage, maxDamage)
-            player._countHeal++
-
-            return player
+            this._countHeal++
         }
-
-        return this
     }
 }
